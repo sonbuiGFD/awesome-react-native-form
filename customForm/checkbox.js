@@ -13,12 +13,34 @@ const CB_DISABLED_IMAGE = require('./cb_disabled.png');
 export default class CheckBox extends Component {
     constructor(props) {
         super(props);
-        this.state = { internalChecked: props.checked || false };
+        this.state = {
+          internalChecked: props.checked || false,
+          isDirty: false,
+          isValid: true,
+        };
     }
-    onChange = () => {
+
+    validate(value){
+      const { validationFunction, fieldRef } = this.props;
+      let result = false;
+      this.errorMessage = [];
+      if(typeof(validationFunction) === 'function') {
+        result = validationFunction(value);
+        if(result && result.isValid){
+          this.setState({isValid:result.isValid, isDirty: true});
+        }
+        else{
+          this.errorMessage = result.errorMessage;
+          this.setState({isValid:false, isDirty: true});
+        }
+      }
+      return result;
+    }
+
+    handleChange = () => {
       const { internalChecked } = this.state;
       const { onChange, fieldRef } = this.props;
-      const newValue = !internalChecked
+      const newValue = !internalChecked;
       this.setState({
           internalChecked: newValue
       });
@@ -39,12 +61,12 @@ export default class CheckBox extends Component {
 
 
     render() {
-      const { checked, checkedImage, uncheckedImage, containerStyle,
+      const { checkedImage, uncheckedImage, containerStyle,
         underlayColor, checkboxStyle, labelStyle, label } = this.props;
       const { internalChecked } = this.state;
       const source = internalChecked ? checkedImage : uncheckedImage;
       return (
-          <TouchableHighlight onPress={this.onChange} underlayColor={underlayColor} style={styles.flexContainer}>
+          <TouchableHighlight onPress={this.handleChange} underlayColor={underlayColor} style={styles.flexContainer}>
             <View style={containerStyle || styles.container}>
                 <Image
                   style={checkboxStyle || styles.checkbox}

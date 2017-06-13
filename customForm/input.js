@@ -41,7 +41,7 @@ triggerValidation() {
 }
 
 validate(value){
-  const { validationFunction } = this.props;
+  const { validationFunction, fieldRef } = this.props;
   let result = false;
   this.errorMessage = [];
   if(typeof(validationFunction) === 'function') {
