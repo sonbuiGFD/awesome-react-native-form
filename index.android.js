@@ -10,9 +10,30 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableHighlight,
+  Button
 } from 'react-native';
-import { Form, InputComponent } from './customForm';
+import { Form, InputComponent, DatePickerField } from './customForm';
+
+// function validateInput({value, isRequired}) {
+//   let isValid = true, message = [];
+//   if(isRequired && (!value || value === '')) {
+//     isValid = false;
+//     message.push('Input is required')
+//   }
+//   // const matches = value && value.match();
+//   // if (matches != null) {
+//   //   isValid = false;
+//   //   message.push('Input is required')
+//   // }
+//   return {isValid, message};
+// }
+
+function validateFormatInput(value) {
+  const re =  /^([a-zA-Z ]+)$/; // /^[a-zàâçéèêëîïôûùüÿñæœ.-]*$/i
+  const isValid = re.test(value);
+  return isValid;
+}
+
 export default class testForm extends Component {
   constructor(props){
     super(props);
@@ -40,108 +61,50 @@ export default class testForm extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Form
-          ref={(form) => { if(form) this.form = form}}
-          onChange={this.handleFormChange}
-          style={{flex: 1, borderColor: '#000', borderWidth: 1}}
-        >
-          <InputComponent
-             fieldRef='first_name'
-             placeholder='First Name'
-             style={{flex: 1}}
-             containerStyle={{flex: 1}}
-             validationFunction={(value) => {
-               let isValid = true, message = [];
-               if(!value || value === '') {
-                 isValid = false;
-                 message.push('Input is required')
-               }
-               const matches = value && value.match(/\d+/g);
-               if (matches != null) {
-                 isValid = false;
-                 message.push('Input is required')
-               }
-               return {isValid, message};
-            }}
-          />
-          <InputComponent
-             fieldRef='last_name'
-             placeholder='Last Name'
-             style={{flex: 1}}
-             containerStyle={{flex: 1}}
-             validationFunction={(value) => {
-               let isValid = true, message = [];
-               if(!value || value === '') {
-                 isValid = false;
-                 message.push('Input is required')
-               }
-               const matches = value && value.match(/\d+/g);
-               if (matches != null) {
-                 isValid = false;
-                 message.push('Input is required')
-               }
-               return {isValid, message};
-            }}
-          />
-          <InputComponent
-             fieldRef='Fone_number'
-             placeholder='Last Name'
-             keyboardType = 'numeric'
-             style={{flex: 1}}
-             containerStyle={{flex: 1}}
-             validationFunction={(value) => {
-               let isValid = true, message = [];
-               if(!value || value === '') {
-                 isValid = false;
-                 message.push('Input is required')
-               }
-               return {isValid, message};
-            }}
-          />
-        </Form>
-          <TouchableHighlight
-            style={{
-              flex: 1,
-               borderColor: '#000',
-               borderWidth: 1,
-               height: 10
-             }}
-             onPress={this.getData}>
-             <Text>get data</Text>
-          </TouchableHighlight>
-          <TouchableHighlight
-            style={{
-              flex: 1,
-               borderColor: '#000',
-               borderWidth: 1,
-               height: 10
-             }}
-             onPress={this.checkValid}>
-             <Text>checkValid</Text>
-          </TouchableHighlight>
-          <TouchableHighlight
-            style={{
-              flex: 1,
-               borderColor: '#000',
-               borderWidth: 1,
-               height: 10
-             }}
-             onPress={this.setValue}>
-             <Text>set data</Text>
-          </TouchableHighlight>
-        <Text>{JSON.stringify(this.state.formData)}</Text>
-
-      </View>
+      <Form
+        ref={(form) => { if(form) this.form = form}}
+        onChange={this.handleFormChange}
+      >
+        <InputComponent
+           fieldRef='first_name'
+           placeholder='Nom *'
+           isRequired={true}
+           max={50}
+           validationFunction={[validateFormatInput]}
+        />
+        <InputComponent
+           fieldRef='last_name'
+           placeholder='Prénoms *'
+           isRequired={true}
+           max={50}
+           validationFunction={[validateFormatInput]}
+        />
+        <InputComponent
+           fieldRef='Fone_number'
+           placeholder='Telephone mobile *'
+           max={10}
+           keyboardType = 'numeric'
+        />
+        <DatePickerField
+          fieldRef='birthday'
+          placeholder='Date de naissance'
+          isRequired={true}
+        />
+        <Button
+          title='getdata'
+          onPress={this.getData}>
+        </Button>
+        <Button
+          title='submit'
+          onPress={this.checkValid}>
+        </Button>
+        <Button
+          title='setdata'
+          onPress={this.setValue}>
+        </Button>
+      </Form>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5FCFF',
-  }
-});
 
 AppRegistry.registerComponent('testForm', () => testForm);

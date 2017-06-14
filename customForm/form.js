@@ -46,8 +46,6 @@ export default class Form extends Component{
     return isValid;
   }
 
-
-
   render(){
     let wrappedChildren = [];
     React.Children.map(this.props.children, (child, i)=> {
