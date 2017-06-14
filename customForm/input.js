@@ -34,6 +34,7 @@ export default class InputComponent extends Component{
     this.setValue = this.setValue.bind(this);
     this.triggerValidation = this.triggerValidation.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.validate = this.validate.bind(this);
   }
 
   triggerValidation() {
@@ -58,6 +59,9 @@ export default class InputComponent extends Component{
     return isValid;
   }
 
+  getValid() {
+    return this.validate();
+  }
   setValue(value){
     const {onChange, fieldRef} = this.props;
     this.setState({value, isDirty: true}, () => {

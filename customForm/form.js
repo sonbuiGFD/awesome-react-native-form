@@ -35,8 +35,9 @@ export default class Form extends Component{
   checkFormValid = () => {
     let isValid = true;
     this.child.forEach((val) => {
-      if (this.refs[val] && this.refs[val].validate) {
-        const checkResult = this.refs[val].validate();
+      if (this.refs[val] && this.refs[val].getValid && this.refs[val].triggerValidation) {
+        this.refs[val].triggerValidation();
+        const checkResult = this.refs[val].getValid();
 
         if(!checkResult) {
           isValid = false;
@@ -49,24 +50,24 @@ export default class Form extends Component{
   render(){
     let wrappedChildren = [];
     React.Children.map(this.props.children, (child, i)=> {
-     if (!child) {
-       return null;
-     }
-     if(child.props.fieldRef && this.child.indexOf(child.props.fieldRef) === -1){
-       this.child.push(child.props.fieldRef);
-     }
-    wrappedChildren.push(React.cloneElement(child, {
-         key: child.ref || child.type+i,
-         fieldRef : child.props.fieldRef,
-         ref: child.props.fieldRef,
-         onChange:this.handleFieldChange
-       }
-     ));
+      if (!child) {
+        return null;
+      }
+      if(child.props.fieldRef && this.child.indexOf(child.props.fieldRef) === -1){
+        this.child.push(child.props.fieldRef);
+      }
+      wrappedChildren.push(React.cloneElement(child, {
+          key: child.ref || child.type+i,
+          fieldRef : child.props.fieldRef,
+          ref: child.props.fieldRef,
+          onChange:this.handleFieldChange
+        })
+      );
     }, this);
-   return (
-     <ScrollView>
+    return (
+      <ScrollView>
         {wrappedChildren}
-     </ScrollView>
-   );
+      </ScrollView>
+    );
   }
 }
