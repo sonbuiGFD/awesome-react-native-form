@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import { View, TextInput, StyleSheet, ScrollView } from 'react-native';
+
 export default class Form extends Component{
   constructor(props){
     super();
@@ -32,17 +33,17 @@ export default class Form extends Component{
   }
 
   checkFormValid = () => {
-    let result = true;
+    let isValid = true;
     this.child.forEach((val) => {
-      if(this.refs[val] && this.refs[val].checkInputValid){
-        const checkResult = this.refs[val].checkInputValid();
+      if (this.refs[val] && this.refs[val].validate) {
+        const checkResult = this.refs[val].validate();
 
-        if(checkResult && !checkResult.isValid) {
-          result = false;
+        if(!checkResult) {
+          isValid = false;
         }
       }
     });
-    return result;
+    return isValid;
   }
 
 
@@ -53,7 +54,7 @@ export default class Form extends Component{
      if (!child) {
        return null;
      }
-     if( this.child.indexOf(child.props.fieldRef) === -1){
+     if(child.props.fieldRef && this.child.indexOf(child.props.fieldRef) === -1){
        this.child.push(child.props.fieldRef);
      }
     wrappedChildren.push(React.cloneElement(child, {
@@ -65,9 +66,9 @@ export default class Form extends Component{
      ));
     }, this);
    return (
-     <View style={this.props.style}>
-         {wrappedChildren}
-     </View>
+     <ScrollView>
+        {wrappedChildren}
+     </ScrollView>
    );
   }
 }
