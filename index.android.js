@@ -12,7 +12,7 @@ import {
   View,
   Button
 } from 'react-native';
-import { Form, InputComponent, DatePickerField } from './customForm';
+import { Form, InputComponent, DatePickerField, CheckBox, PickerComponent } from './customForm';
 
 // function validateInput({value, isRequired}) {
 //   let isValid = true, message = [];
@@ -55,41 +55,45 @@ export default class testForm extends Component {
     alert(JSON.stringify(data));
   }
   setValue = () => {
-    const data = {first_name: 'sơn đẹp trai'}
+    const data = {first_name: 'sơn đẹp trai'};
     this.form.setValues(data);
   }
 
   render() {
     return (
-      <Form
-        ref={(form) => { if(form) this.form = form}}
-        onChange={this.handleFormChange}
-      >
-        <InputComponent
-           fieldRef='first_name'
-           placeholder='Nom *'
-           isRequired={true}
-           max={50}
-           validationFunction={[validateFormatInput]}
-        />
-        <InputComponent
-           fieldRef='last_name'
-           placeholder='Prénoms *'
-           isRequired={true}
-           max={50}
-           validationFunction={[validateFormatInput]}
-        />
-        <InputComponent
-           fieldRef='Fone_number'
-           placeholder='Telephone mobile *'
-           max={10}
-           keyboardType = 'numeric'
-        />
-        <DatePickerField
-          fieldRef='birthday'
-          placeholder='Date de naissance'
-          isRequired={true}
-        />
+      <View>
+        <Form
+          ref={(form) => { if(form) this.form = form}}
+          onChange={this.handleFormChange}
+        >
+          <InputComponent
+             fieldRef='first_name'
+             placeholder='Nom *'
+             isRequired={true}
+             max={50}
+             validationFunction={[validateFormatInput]}
+          />
+          <InputComponent
+             fieldRef='last_name'
+             placeholder='Prénoms *'
+             isRequired={true}
+             max={50}
+             validationFunction={[validateFormatInput]}
+          />
+          <InputComponent
+             fieldRef='Fone_number'
+             placeholder='Telephone mobile *'
+             max={10}
+             keyboardType = 'numeric'
+          />
+          <DatePickerField
+            fieldRef='birthday'
+            placeholder='Date de naissance'
+            isRequired={true}
+          />
+          <CheckBox fieldRef='checkBox' label="test check box" />
+          <PickerComponent fieldRef='sellect' value="test" label="this is picker" options={['test', 'test1', 'test2']} />
+        </Form>
         <Button
           title='getdata'
           onPress={this.getData}>
@@ -102,7 +106,7 @@ export default class testForm extends Component {
           title='setdata'
           onPress={this.setValue}>
         </Button>
-      </Form>
+      </View>
     );
   }
 }
